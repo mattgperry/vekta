@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test-watch": "jest --watch",
     "build": "npm run test && babel src -d lib",
     "prepublish": "npm run build"
   },
@@ -12,9 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/Popmotion/vekta.git"
   },
-  "keywords": [
-    "vector"
-  ],
+  "keywords": ["vector"],
   "author": "Matt Perry",
   "license": "MIT",
   "bugs": {
@@ -23,12 +22,7 @@
   "homepage": "https://github.com/Popmotion/vekta#readme",
   "jest": {
     "testRegex": "(/_tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["js", "jsx", "json", "node"],
     "rootDir": "src"
   },
   "devDependencies": {
