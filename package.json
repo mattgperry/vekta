@@ -1,0 +1,49 @@
+{
+  "name": "vekta",
+  "version": "0.0.1",
+  "description": "A vector library with swizzling",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "npm run test && babel src -d lib",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Popmotion/vekta.git"
+  },
+  "keywords": [
+    "vector"
+  ],
+  "author": "Matt Perry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Popmotion/vekta/issues"
+  },
+  "homepage": "https://github.com/Popmotion/vekta#readme",
+  "jest": {
+    "testRegex": "(/_tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "rootDir": "src"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "jest": "^22.4.3",
+    "regenerator-runtime": "^0.11.1"
+  },
+  "unpkg": "./dist/vekta.global.js",
+  "prettier": {
+    "singleQuote": true
+  }
+}
