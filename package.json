@@ -1,22 +1,21 @@
 {
   "name": "vekta",
   "version": "0.1.0",
-  "description": "A JavaScript vector library with GLSL-inspired swizzling and type validation",
-  "main": "index.js",
+  "description": "A JavaScript vector library with GLSL-inspired swizzling",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
-    "build": "babel src -d lib",
+    "build": "babel src -d lib && npx webpack --config webpack.config.js",
     "lint": "eslint src",
+    "measure": "gzip -c dist/vekta.js | wc -c",
     "prepublish": "npm run lint && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Popmotion/vekta.git"
   },
-  "keywords": [
-    "vector"
-  ],
+  "keywords": ["vector"],
   "author": "Matt Perry",
   "license": "MIT",
   "bugs": {
@@ -25,12 +24,7 @@
   "homepage": "https://github.com/Popmotion/vekta#readme",
   "jest": {
     "testRegex": "(/_tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["js", "jsx", "json", "node"],
     "rootDir": "src"
   },
   "devDependencies": {
@@ -43,7 +37,9 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "jest": "^22.4.3",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
   },
   "unpkg": "./dist/vekta.global.js",
   "prettier": {

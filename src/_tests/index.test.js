@@ -38,4 +38,7 @@ test('vec()', () => {
   expect(b).toEqual([5, 1, 2, 5]);
   const { x, y } = a;
   expect(x).toEqual(1);
+
+  // Enumerate
+  expect(a.map(v => v)).toEqual([1, 2]);
 });

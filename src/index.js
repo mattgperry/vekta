@@ -91,7 +91,7 @@ const vector = axisOrder => {
   const indices = axisOrder.reduce(makeIndicesMap, {});
   const vecFactories = [];
 
-  const vectorProxy = {
+  const vectorProxy = size => ({
     get(target, key, receiver) {
       return isSwizzleKey(key, indices)
         ? getSwizzled(target, indices, key, vecFactories)
@@ -102,13 +102,15 @@ const vector = axisOrder => {
         ? setSwizzled(target, indices, key, value)
         : Reflect.set(target, key, value, receiver);
     }
-  };
+  });
 
   return axisOrder.reduce((acc, _, i) => {
     // No vector factories for 1-dimensions
     if (i > 0) {
+      const size = i + 1;
       acc.push(
-        (...values) => new Proxy(fillVectorArray(values, i + 1), vectorProxy)
+        (...values) =>
+          new Proxy(fillVectorArray(values, size), vectorProxy(size))
       );
     }
     return acc;
@@ -117,3 +119,5 @@ const vector = axisOrder => {
 
 export { vector };
 export const [vec2, vec3, vec4] = vector(['x', 'y', 'z', 'w']);
+export const [rg, rgb, rgba] = vector(['r', 'g', 'b', 'a']);
+export const [hs, hsl, hsla] = vector(['h', 's', 'l', 'a']);
