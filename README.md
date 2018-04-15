@@ -1,6 +1,6 @@
 # <img src="https://user-images.githubusercontent.com/7850794/38776168-b90a8f0c-408a-11e8-96cb-3d76800f118d.png" height="77" width="212" alt="Vekta" /></a>
 
-### A vector library with GLSL-inspired swizzling
+### A JavaScript vector library with GLSL-inspired swizzling
 
 ```javascript
 const pos = vec2(0); // [0, 0]
@@ -18,12 +18,20 @@ const pos3d = vec3(pos, 10); // [1, 0, 10]
 
 ## Install
 
+Via package managers:
+
 ```bash
 npm install vekta --save
 ```
 
 ```bash
 yarn add vekta
+```
+
+Via CDN (Loads Vekta into `window.vekta`):
+
+```
+https://unpkg.com/vekta/dist/vekta.js
 ```
 
 ## Usage
@@ -73,10 +81,10 @@ pos.xy; // [0, 10]
 These values will be returned in the order defined:
 
 ```javascript
-pos.yx; // 10, 0
+pos.yx; // [10, 0]
 ```
 
-We can define up to four dimensions to return, and can repeat any:
+We can define up to four dimensions to return:
 
 ```javascript
 pos.zzzz; // [20, 20, 20, 20]
@@ -127,13 +135,13 @@ HSLA property order: `['h', 's', 'l', 'a']`
 
 ## Create vector types
 
-New vector types can be created with the `vectorTypes` function.
+New vector types can be created with the `vectorType` function.
 
 ```javascript
 import { vectorType } from 'vekta';
 ```
 
-`vectorTypes` accepts an array of unique, alphabetic keys. Each key must be of `length === 1`, and the array itself must be `length >= 2`.
+`vectorType` accepts an array of unique, alphabetic keys. Each key must be of `length === 1`, and the array itself must be `length >= 2`.
 
 It returns an array of functions that handle permutations of the vector type of length `2` to `n`, where `n` is the total number of given keys.
 
