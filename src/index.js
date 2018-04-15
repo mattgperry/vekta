@@ -1,26 +1,3 @@
-// Fill a given array to the size provided with
-// a repeating pattern of its existing values. ie ([10, 20], 3) -> [10, 20, 10]
-const fillVectorArray = (values, size) => {
-  const newValues = flatten(values);
-  const numValues = newValues.length;
-
-  // If we already have the correct number of values, return early
-  if (numValues === size) return newValues;
-
-  // Set array to correct size
-  newValues.length = size;
-
-  // Fill in the blanks
-  for (let i = 0; i < size; i++) {
-    // We're using modulo to wrap the index to within the values range
-    // so vec4(10, 20) becomes [10, 20, 10, 20]
-    if (newValues[i] === undefined)
-      newValues[i] = values[(i % numValues + numValues) % numValues];
-  }
-
-  return newValues;
-};
-
 // Flatten an array of values
 const flattenItem = (acc, val) => {
   if (Array.isArray(val)) {
@@ -35,9 +12,32 @@ const flattenItem = (acc, val) => {
 
 const flatten = arr => arr.reduce(flattenItem, []);
 
+const getWrappedIndex = (total, i) => (i % total + total) % total || 0;
+
+// Fill a given array to the size provided with
+// a repeating pattern of its existing values. ie ([10, 20], 3) -> [10, 20, 10]
+const fillVectorArray = (values, size) => {
+  const newValues = flatten(values);
+  const numValues = newValues.length;
+
+  // If we already have the correct number of values, return early
+  if (numValues === size) return newValues;
+
+  // Set array to correct size
+  newValues.length = size;
+
+  // Fill in the blanks
+  for (let i = 0; i < size; i++) {
+    if (newValues[i] === undefined)
+      newValues[i] = newValues[getWrappedIndex(numValues, i)];
+  }
+
+  return newValues;
+};
+
 const makeIndicesMap = (map, key, i) => ((map[key] = i), map);
 
-const getSwizzleKeys = (key, indices) => {
+const isSwizzleKey = (key, indices) => {
   if (
     // If this isn't a string, bail
     typeof key !== 'string' ||
@@ -51,30 +51,39 @@ const getSwizzleKeys = (key, indices) => {
 
   // Iterate through all the keys and test to see if they exist in
   // the indices map. If one doesn't, bail.
-  const keys = key.split('');
-  const numKeys = keys.length;
+  const numKeys = key.length;
   for (let i = 0; i < numKeys; i++) {
-    if (indices[keys[i]] === undefined) return false;
+    if (indices[key[i]] === undefined) return false;
   }
 
-  return keys;
+  return key;
 };
 
 const getVectorFactory = (factories, size) => factories[size - 2];
 
-const getSwizzled = (target, indices, keys, vec) => {
-  const numKeys = keys.length;
-  return numKeys === 1
-    ? target[indices[keys[0]]]
-    : keys.reduce((acc, key, i) => {
-        acc[i] = target[indices[key]];
-        return acc;
-      }, getVectorFactory(vec, numKeys)());
+// TODO: Replace .split('') with a for loop
+const getSwizzled = (target, indices, key, vec) => {
+  const numKeys = key.length;
+
+  if (numKeys === 1) {
+    return target[indices[key[0]]];
+  } else {
+    const values = [];
+    for (let i = 0; i < numKeys; i++) values.push(target[indices[key[i]]]);
+    return getVectorFactory(vec, numKeys)(values);
+  }
 };
 
-const setSwizzled = (target, indices, keys, value) => {
-  const numKeys = keys.length;
-  for (let i = 0; i < numKeys; i++) target[indices[keys[i]]];
+const setSwizzled = (target, indices, key, value) => {
+  const numKeys = key.length;
+  const valueIsArray = Array.isArray(value);
+  const numValues = valueIsArray ? value.length : 0;
+
+  for (let i = 0; i < numKeys; i++) {
+    target[indices[key[i]]] = valueIsArray
+      ? value[getWrappedIndex(numValues, i)]
+      : value;
+  }
   return value;
 };
 
@@ -84,20 +93,19 @@ const vector = axisOrder => {
 
   const vectorProxy = {
     get(target, key, receiver) {
-      const swizzleKeys = getSwizzleKeys(key, indices);
-      return swizzleKeys
-        ? getSwizzled(target, indices, swizzleKeys, vecFactories)
+      return isSwizzleKey(key, indices)
+        ? getSwizzled(target, indices, key, vecFactories)
         : Reflect.get(target, key, receiver);
     },
     set(target, key, value, receiver) {
-      const swizzleKeys = getSwizzleKeys(key, indices);
-      return swizzleKeys
-        ? setSwizzled(target, indices, swizzleKeys, value)
+      return isSwizzleKey(key, indices)
+        ? setSwizzled(target, indices, key, value)
         : Reflect.set(target, key, value, receiver);
     }
   };
 
   return axisOrder.reduce((acc, _, i) => {
+    // No vector factories for 1-dimensions
     if (i > 0) {
       acc.push(
         (...values) => new Proxy(fillVectorArray(values, i + 1), vectorProxy)
@@ -109,5 +117,3 @@ const vector = axisOrder => {
 
 export { vector };
 export const [vec2, vec3, vec4] = vector(['x', 'y', 'z', 'w']);
-export const [rg, rgb, rgba] = vector(['r', 'g', 'b', 'a']);
-export const [hs, hsl, hsla] = vector(['h', 's', 'l', 'a']);

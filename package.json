@@ -1,19 +1,22 @@
 {
   "name": "vekta",
-  "version": "0.0.1",
-  "description": "A vector library with swizzling",
+  "version": "0.1.0",
+  "description": "A JavaScript vector library with GLSL-inspired swizzling and type validation",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
-    "build": "npm run test && babel src -d lib",
-    "prepublish": "npm run build"
+    "build": "babel src -d lib",
+    "lint": "eslint src",
+    "prepublish": "npm run lint && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Popmotion/vekta.git"
   },
-  "keywords": ["vector"],
+  "keywords": [
+    "vector"
+  ],
   "author": "Matt Perry",
   "license": "MIT",
   "bugs": {
@@ -22,12 +25,18 @@
   "homepage": "https://github.com/Popmotion/vekta#readme",
   "jest": {
     "testRegex": "(/_tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["js", "jsx", "json", "node"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "rootDir": "src"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",

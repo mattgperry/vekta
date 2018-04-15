@@ -1,3 +1,22 @@
 {
-    "extends": "airbnb-base"
+  "rules": {
+    "strict": 0,
+    "indent": [2, 2],
+    "quotes": [2, "single"],
+    "linebreak-style": [2, "unix"],
+    "semi": [2, "always"],
+    "no-unused-vars": [2, { "ignoreRestSiblings": true }],
+    "no-mixed-operators": 0,
+    "no-plusplus": 0,
+    "curly": 0,
+    "no-return-assign": 0
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
+  "parser": "babel-eslint",
+  "extends": "eslint:recommended"
 }
