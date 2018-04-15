@@ -38,7 +38,7 @@ import { vec2 } from 'vekta';
 
 ### Create
 
-Each vector function returns an array containing the values provided:
+Each vector function returns a proxied array:
 
 ```javascript
 const pos = vec2(0, 10); // [0, 10]
@@ -49,7 +49,7 @@ const pos = vec2(0, 10); // [0, 10]
 If the number of provided arguments doesn't match the expected size of the vector, the rest of the array will be filled by cycling through the provided values:
 
 ```javascript
-const pos = vec4(0); // [0, 0, 0, 0]
+const pos = vec4(0, 1); // [0, 1, 0, 1]
 ```
 
 ### Access
@@ -62,7 +62,7 @@ pos[1]; // 10
 pos.y; // 10
 ```
 
-This is known as **swizzling** and is inspired by the vector types in [GLSL](https://www.khronos.org/opengl/wiki/Data_Type_(GLSL#Vectors).
+This is known as **swizzling** and is inspired by the vector types in [GLSL](https://www.khronos.org/opengl/wiki/Data_Type_%28GLSL%29#Vectors).
 
 We can return multiple values as a new vector by naming multiple properties:
 
