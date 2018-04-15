@@ -1,6 +1,6 @@
 # <img src="https://user-images.githubusercontent.com/7850794/38776168-b90a8f0c-408a-11e8-96cb-3d76800f118d.png" height="77" width="212" alt="Vekta" /></a>
 
-### A JavaScript vector library with GLSL-inspired swizzling
+### A JavaScript vector type with GLSL-inspired swizzling
 
 ```javascript
 const pos = vec2(0); // [0, 0]
@@ -118,6 +118,14 @@ const numAxis = pos.length; // 3
 pos.forEach(/**/);
 pos.reduce(/**/);
 pos.map(/**/);
+```
+
+### Animate
+
+[Popmotion](https://popmotion.io) can animate arrays, so it can animate vectors:
+
+```javascript
+tween({ from: pos.xy, to: pos.yx });
 ```
 
 ## Included types
