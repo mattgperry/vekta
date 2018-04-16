@@ -12,6 +12,32 @@ const flattenItem = (acc, val) => {
 
 const flatten = arr => arr.reduce(flattenItem, []);
 
+/**
+ * Create a valid set of swizzles based on a list of single-character keys.
+ * ie ['x', 'y'] -> ['x', 'y', 'xx', 'xy' ...]
+ */
+const createValidSwizzleSet = (keys) => {
+  const numKeys = keys.length;
+  const maxDepth = numKeys - 1;
+  
+  const addKeys = (key, depth) => {
+    const validKeys = [key];
+    
+    if (depth >= maxDepth) return validKeys;
+    
+    for (let i = 0; i < numKeys; i++) {
+      validKeys.push(...addKeys(key + keys[i], depth + 1));
+    }
+ 
+    return validKeys;
+  };
+  
+  return new Set(keys.reduce((acc, key) => {
+    acc.push(...addKeys(key, 0));
+    return acc;
+  }, []));
+};
+
 const getWrappedIndex = (total, i) => (i % total + total) % total || 0;
 
 // Fill a given array to the size provided with
@@ -36,28 +62,6 @@ const fillVectorArray = (values, size) => {
 };
 
 const makeIndicesMap = (map, key, i) => ((map[key] = i), map);
-
-const isSwizzleKey = (key, indices) => {
-  if (
-    // If this isn't a string, bail
-    typeof key !== 'string' ||
-    // Check if this is an Array method
-    Array.prototype.hasOwnProperty(key) ||
-    // Index-based access keys are sent as strings, so here we parse
-    // and test to see if they're actually numbers. If so, bail.
-    !isNaN(parseInt(key))
-  )
-    return false;
-
-  // Iterate through all the keys and test to see if they exist in
-  // the indices map. If one doesn't, bail.
-  const numKeys = key.length;
-  for (let i = 0; i < numKeys; i++) {
-    if (indices[key[i]] === undefined) return false;
-  }
-
-  return key;
-};
 
 const getVectorFactory = (factories, size) => factories[size - 2];
 
@@ -89,16 +93,17 @@ const setSwizzled = (target, indices, key, value) => {
 
 const vectorType = axisOrder => {
   const indices = axisOrder.reduce(makeIndicesMap, {});
+  const validSwizzleKeys = createValidSwizzleSet(axisOrder);
   const vecFactories = [];
 
   const vectorProxy = {
     get(target, key, receiver) {
-      return isSwizzleKey(key, indices)
+      return validSwizzleKeys.has(key)
         ? getSwizzled(target, indices, key, vecFactories)
         : Reflect.get(target, key, receiver);
     },
     set(target, key, value, receiver) {
-      return isSwizzleKey(key, indices)
+      return validSwizzleKeys.has(key)
         ? setSwizzled(target, indices, key, value)
         : Reflect.set(target, key, value, receiver);
     }

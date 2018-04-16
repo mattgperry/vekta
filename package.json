@@ -1,6 +1,6 @@
 {
   "name": "vekta",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A JavaScript vector library with GLSL-inspired swizzling",
   "main": "lib/index.js",
   "scripts": {
@@ -15,7 +15,9 @@
     "type": "git",
     "url": "git+https://github.com/Popmotion/vekta.git"
   },
-  "keywords": ["vector"],
+  "keywords": [
+    "vector"
+  ],
   "author": "Matt Perry",
   "license": "MIT",
   "bugs": {
@@ -24,7 +26,12 @@
   "homepage": "https://github.com/Popmotion/vekta#readme",
   "jest": {
     "testRegex": "(/_tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["js", "jsx", "json", "node"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "rootDir": "src"
   },
   "devDependencies": {
