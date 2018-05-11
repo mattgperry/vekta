@@ -167,6 +167,8 @@ Currently there isn't a big use case for function, but it's easy to imagine addi
 
 Vekta requires [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) features that can't be polyfilled so it doesn't offer Internet Explorer support.
 
+As Googlebot runs Chrome 41, any use of Proxy will prevent client-rendered websites from being crawled correctly.
+
 ## Roadmap
 
 Some ideas for future development:
